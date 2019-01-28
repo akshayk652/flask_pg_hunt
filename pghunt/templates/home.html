@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for post in posts %}
+    <article class="media content-section">
+              <div class="media-body">
+              <div class="article-metadata">
+                <h3 class="text-primary mr-2">{{ post.owner.username }}</h3>
+                <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d') }}</small>
+              </div>
+              <h2 class="article-title" >{{ post.title }}</h2>
+              <div class="row">
+                  <div class="col-md-6 mt-5">
+                      <p class="article-content"><strong>Details</strong> : {{ post.details }}</p>
+                      <a class="btn btn-sm btn-outline-info" href="{{ url_for('posts', post_id=post.id) }}">View More..</a>
+                  </div>
+                  <div class="col-md-6">
+                      <img class="mb-4 mr-4" style="height: 300px; width: 300px;" src="{{ url_for('static', filename='pg_pics/' + post.pg_pic) }}">
+                  </div>
+              </div>
+            </div>
+    </article>
+    {% endfor %}
+{% endblock content %}

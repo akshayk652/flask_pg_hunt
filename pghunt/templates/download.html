@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+    <body onload="download_file">
+        <div class="wrapper">
+            <h1>Preparing download please wait.....</h1>
+            <a id="start-download" class="btn btn-sm btn-outline-info" href="{{ url_for('download_file') }}" target="blank">Download</a>
+        </div>
+    </body>
+{% endblock %}
+{% block script %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+   function download_file() {
+
+       status_url = "{{ url_for('download_status') }}?id={{id}}"
+       ajaxcall()
+   }
+
+   function ajaxcall() {
+       status =false;
+
+
+       $.ajax({
+           method: 'GET',
+           url: "{{ url_for('download_status') }}",
+           dataType: 'json',
+           data: { id: '{{id}}'},
+
+           success: function(data) {
+
+               status =data.status
+               if (data.status ==true) {
+                $("#start-download").show()
+                clearInterval(ajaxcall,0)
+               }
+
+            },
+            error: function(data) {
+                console.log("error")
+            },
+
+            complete : function() {
+
+                console.log("complete",status,status =='false')
+                if(status =='false'){
+                setInterval(ajaxcall,1000);}
+    }
+});
+}
+</script>
+{% endblock %}

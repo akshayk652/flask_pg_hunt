@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block content %}
+    <article class="media content-section">
+      <img class="article-img" src="{{ url_for('static', filename='profile_pics/' + post.owner.image_file) }}">
+            <div class="media-body">
+              <div class="article-metadata">
+                <h3 class="text-primary mr-2">{{ post.owner.username }}</h3>
+                <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d') }}</small>
+                {% if post.owner == current_user %}
+                <div>
+                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update', post_id=post.id) }}">Update</a>
+                    <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                </div>
+                {% endif %}
+              </div>
+              <!-- <img src="..." class="rounded float-left" alt="..."> -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2 class="article-title">{{ post.title }}</h2>
+                        <p class="article-content"><strong>Details</strong> : {{ post.details }}</p>
+                        <p class="article-content"><strong>Price </strong> : {{ post.price }}</p>
+                        <p class="article-content"><strong>Contact</strong> : {{ post.contact }}</p>
+                        <p class="article-content"><strong>Address</strong> : <address>{{ post.address }}</address></p>
+                    </div>
+                    <div class="col-md-4">
+                        <img class="img-fluid" src="{{ url_for('static', filename='pg_pics/' + post.pg_pic) }}">
+                    </div>
+                </div>
+                {% if current_user.account_type == 'customer' %}
+                <div>
+                    <a class="btn btn-outline-info btn-sm mt-1 mb-1" href="{{ url_for('book_pg', post_id=post.id) }}">Book Now!</a>
+                </div>
+                {% endif %}
+            </div>
+    </article>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Are you sure?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('delete', post_id=post.id) }}" method="POST">
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
+{% endblock content %}
